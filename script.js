@@ -4,7 +4,7 @@
 
 // API endpoint
 const API_URL =
-  "https://nss-backend-5zin.onrender.com/api/donations/departments";
+  "https://djsnss-bdd-aug-26.onrender.com/api/donations/departments";
 
 // Refresh interval
 // Change this value in the future if required.
