@@ -515,153 +515,30 @@ function triggerSplash(index) {
 // PIPE PATH ANIMATION
 // ============================================================
 
-function pulsePathAt(
-  pathEl,
-  centerT,
-  width,
-  amp
-) {
+function bloodFlowAt(pathEl, centerT, width) {
 
-  const len =
-    pathEl.getTotalLength();
-
+  const len = pathEl.getTotalLength();
   const steps = 26;
-
   const pts = [];
 
-
-  // ----------------------------------------------------------
-  // Fade the bump out near the hub (centerT close to 0) and
-  // near the tube (centerT close to 1). That's where every
-  // pipe is bundled tightly together, so a full-amplitude bump
-  // there visually crosses over the neighboring static pipes.
-  // Ramping amplitude down to 0 at the very ends keeps the
-  // wave clear of that crowded zone while still letting it
-  // travel the full length of the pipe.
-  // ----------------------------------------------------------
-
-  const FADE_ZONE = 0.15;
-
-  const fade =
-    Math.max(
-      0,
-      Math.min(
-        1,
-        centerT / FADE_ZONE,
-        (1 - centerT) / FADE_ZONE
-      )
-    );
-
-  const fadedAmp =
-    amp * fade;
-
+  const startT = Math.max(0, centerT - width);
+  const endT = Math.min(1, centerT + width);
 
   for (let i = 0; i <= steps; i++) {
 
-    const t =
-      i / steps;
+    const t = startT + ((endT - startT) * i) / steps;
 
-
-    const p =
-      pathEl.getPointAtLength(
-        t * len
-      );
-
-
-    let x = p.x;
-    let y = p.y;
-
-
-    const d =
-      (t - centerT) / width;
-
-
-    if (Math.abs(d) < 1) {
-
-      const before =
-        pathEl.getPointAtLength(
-          Math.max(
-            0,
-            t * len - 2
-          )
-        );
-
-
-      const after =
-        pathEl.getPointAtLength(
-          Math.min(
-            len,
-            t * len + 2
-          )
-        );
-
-
-      const dx =
-        after.x - before.x;
-
-      const dy =
-        after.y - before.y;
-
-
-      const mag =
-        Math.hypot(dx, dy) || 1;
-
-
-      const nx =
-        -dy / mag;
-
-      const ny =
-        dx / mag;
-
-
-      const ad =
-        Math.abs(d);
-
-
-      let profile = 0;
-
-
-      if (ad < 0.15) {
-        profile = -0.5;
-      }
-
-      else if (ad < 0.35) {
-        profile = 1;
-      }
-
-      else if (ad < 0.55) {
-        profile = -1.6;
-      }
-
-      else if (ad < 0.75) {
-        profile = 0.4;
-      }
-
-
-      x +=
-        nx * fadedAmp * profile;
-
-      y +=
-        ny * fadedAmp * profile;
-
-    }
-
+    const p = pathEl.getPointAtLength(t * len);
 
     pts.push(
-      x.toFixed(1) +
-      "," +
-      y.toFixed(1)
+      p.x.toFixed(1) + "," + p.y.toFixed(1)
     );
 
   }
 
-
-  return "M " +
-    pts.join(" L ");
+  return "M " + pts.join(" L ");
 
 }
-
-
 // ============================================================
 // STOP PIPE ANIMATION
 // ============================================================
@@ -1054,13 +931,10 @@ function buildPipes() {
 
       pulse.setAttribute(
         "d",
-        pulsePathAt(
+        bloodFlowAt(
           pipeEls[activeIndex],
           t,
-          0.14,
-          window.innerWidth < 600
-            ? 5
-            : 7
+          0.14
         )
       );
 
