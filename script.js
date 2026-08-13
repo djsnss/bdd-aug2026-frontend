@@ -12,7 +12,7 @@ const API_URL =
 // 10 * 1000 = 10 seconds
 // 30 * 1000 = 30 seconds
 // 60 * 1000 = 1 minute
-const API_REFRESH_INTERVAL_MS = 10 * 1000;
+const API_REFRESH_INTERVAL_MS = 30 * 1000;
 
 // Maximum value represented by a completely filled tube
 // Change this whenever you want.
