@@ -39,7 +39,7 @@ const DEPARTMENT_ORDER = [
   "ICB",
   "IT",
   "MECH",
-  "Outsider"
+  "Other"
 ];
 
 
